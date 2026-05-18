@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+import { X, Mail, Lock, User, ArrowRight, Loader as Loader2, Eye, EyeOff } from 'lucide-react';
 import Logo from '../components/Logo';
 import { emailSignIn, emailSignUp, googleSignIn } from '../lib/firebase';
 
@@ -18,6 +18,7 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
   const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   React.useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -40,7 +41,8 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
       }
     } catch (err: any) {
       console.error('Auth error:', err);
-      setError(err.message || 'Authentication failed');
+      const msg = err?.message || 'Authentication failed';
+      setError(msg.includes('auth/') ? msg.split('(')[0].trim() : msg);
     } finally {
       setLoading(false);
     }
@@ -61,159 +63,202 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] bg-[#050505] overflow-hidden selection:bg-gold/30"
+      className="fixed inset-0 z-[100] bg-[#050505] overflow-y-auto selection:bg-gold/30"
     >
       {/* Background Decor */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/5 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gold/5 blur-[120px] rounded-full" />
+        <div className="absolute top-[-10%] left-[10%] w-[400px] h-[400px] sm:w-[600px] sm:h-[600px] bg-gold/[0.03] blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[10%] w-[400px] h-[400px] sm:w-[600px] sm:h-[600px] bg-gold/[0.03] blur-[120px] rounded-full" />
       </div>
 
-      <nav className="absolute top-0 left-0 w-full z-50 px-6 py-4 border-b border-[#1A1A1A]/50 bg-gradient-to-b from-[#050505] to-transparent">
-        <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Logo className="w-6 h-6" />
-            <span className="text-base font-sans font-medium tracking-tight text-white">PropAI</span>
-          </div>
-          <button 
-            onClick={onClose}
-            className="p-1.5 rounded-full text-[#333] hover:text-white hover:bg-[#1A1A1A] transition-all"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-      </nav>
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 z-50 p-2.5 rounded-xl text-[#444] hover:text-white hover:bg-[#1A1A1A] transition-all"
+      >
+        <X className="w-5 h-5" />
+      </button>
 
-      <div className="h-screen w-full flex items-center justify-center p-4 sm:p-6 relative z-10 overflow-hidden">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-[320px] bg-[#0A0A0A]/95 backdrop-blur-2xl border border-[#2A2A2A] rounded-2xl p-6 sm:p-8 relative shadow-2xl overflow-hidden"
+      <div className="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.21, 0.45, 0.32, 0.9] }}
+          className="w-full max-w-[420px] relative"
         >
-          {/* Background Glow */}
-          <div className="absolute -top-24 -left-24 w-48 h-48 bg-gold/5 blur-[80px] rounded-full pointer-events-none" />
-          
-          <div className="flex flex-col items-center mb-4">
-            <h2 className="text-xs font-sans text-white font-medium tracking-tight text-center">
-              {mode === 'signin' ? 'Sign in to PropAI' : 'Create Account'}
-            </h2>
-            <p className="text-[#444] text-[6px] uppercase tracking-[0.2em] font-bold mt-1">Autonomous growth starts here</p>
+          {/* Logo & Header */}
+          <div className="flex flex-col items-center mb-8">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="w-14 h-14 bg-gold/10 rounded-2xl flex items-center justify-center border border-gold/20 mb-5"
+            >
+              <Logo className="w-7 h-7" />
+            </motion.div>
+            <h1 className="text-xl sm:text-2xl font-sans text-white font-medium tracking-tight text-center">
+              {mode === 'signin' ? 'Welcome back' : 'Create your account'}
+            </h1>
+            <p className="text-[#555] text-sm mt-2 text-center">
+              {mode === 'signin'
+                ? 'Sign in to access your PropAI dashboard'
+                : 'Get started with PropAI in seconds'}
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-2">
-            <AnimatePresence mode="wait">
-              {mode === 'signup' && (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="grid grid-cols-2 gap-2 mb-0.5"
-                >
-                  <div className="space-y-0.5">
-                    <label className="text-[6px] uppercase tracking-widest font-black text-[#444] px-1">First Name</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="First"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md px-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222]"
-                    />
-                  </div>
-                  <div className="space-y-0.5">
-                    <label className="text-[6px] uppercase tracking-widest font-black text-[#444] px-1">Last Name</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Last"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md px-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222]"
-                    />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          {/* Card */}
+          <div className="bg-[#0A0A0A]/95 backdrop-blur-2xl border border-[#1A1A1A] rounded-2xl p-6 sm:p-8 relative shadow-2xl overflow-hidden">
+            {/* Subtle inner glow */}
+            <div className="absolute -top-20 -right-20 w-40 h-40 bg-gold/[0.03] blur-[60px] rounded-full pointer-events-none" />
 
-            <div className="space-y-0.5">
-              <label className="text-[6px] uppercase tracking-widest font-black text-[#444] px-1">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-2.5 top-1/2 -translate-y-1/2 w-2 h-2 text-[#333]" />
-                <input
-                  type="email"
-                  required
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md pl-7 pr-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222]"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-0.5">
-              <label className="text-[6px] uppercase tracking-widest font-black text-[#444] px-1">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-2.5 top-1/2 -translate-y-1/2 w-2 h-2 text-[#333]" />
-                <input
-                  type="password"
-                  required
-                  placeholder="********"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md pl-7 pr-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222]"
-                />
-              </div>
-            </div>
-
-            {error && (
-              <p className="text-[6px] text-red-500 font-bold uppercase tracking-widest text-center py-0.5">{error}</p>
-            )}
-
+            {/* Google Sign In - Top */}
             <button
-              type="submit"
-              disabled={loading}
-              className="luxury-button w-full py-2.5 text-[7px] mt-2 flex items-center justify-center gap-1.5 group shadow-[0_0_10px_rgba(197,160,89,0.1)]"
-            >
-              {loading ? <Loader2 className="w-2 h-2 animate-spin" /> : (
-                <>
-                  {mode === 'signin' ? 'Sign In' : 'Create Account'}
-                  <ArrowRight className="w-2 h-2 transition-transform group-hover:translate-x-1" />
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="mt-4 flex flex-col items-center gap-3">
-            <div className="flex items-center gap-3 w-full">
-              <div className="h-px bg-[#1A1A1A] flex-1" />
-              <span className="text-[6px] text-[#222] uppercase font-black tracking-widest">or</span>
-              <div className="h-px bg-[#1A1A1A] flex-1" />
-            </div>
-
-            <button 
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center gap-2 bg-white text-black py-2 rounded-md font-bold text-[7px] uppercase tracking-widest hover:bg-[#F0F0F0] transition-all"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 bg-white text-black py-3.5 rounded-xl font-semibold text-sm hover:bg-[#F0F0F0] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <svg className="w-2 h-2" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1Z" />
-                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23Z" />
-                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84Z" />
-                <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53Z" />
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1Z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23Z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84Z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53Z" />
               </svg>
               Continue with Google
             </button>
 
-            <button 
-              onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
-              className="text-[7px] uppercase font-black tracking-widest text-[#444] hover:text-gold transition-colors"
-            >
-              {mode === 'signin' ? "Need a protocol? Sign up" : "Registered? Sign in"}
-            </button>
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-6">
+              <div className="h-px bg-[#1A1A1A] flex-1" />
+              <span className="text-xs text-[#333] font-medium">or</span>
+              <div className="h-px bg-[#1A1A1A] flex-1" />
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <AnimatePresence mode="wait">
+                {mode === 'signup' && (
+                  <motion.div
+                    key="name-fields"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="grid grid-cols-2 gap-3"
+                  >
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-medium text-[#888] px-0.5">First name</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="First"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#333] focus:border-gold/40 outline-none transition-all"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-medium text-[#888] px-0.5">Last name</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Last"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#333] focus:border-gold/40 outline-none transition-all"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-medium text-[#888] px-0.5">Email</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#444]" />
+                  <input
+                    type="email"
+                    required
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-[#333] focus:border-gold/40 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-medium text-[#888] px-0.5">Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#444]" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    placeholder="Min. 6 characters"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl pl-11 pr-12 py-3 text-sm text-white placeholder:text-[#333] focus:border-gold/40 outline-none transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#444] hover:text-[#888] transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-red-500/5 border border-red-500/20 rounded-xl px-4 py-3"
+                >
+                  <p className="text-xs text-red-400 font-medium">{error}</p>
+                </motion.div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="luxury-button w-full py-3.5 text-xs mt-2 flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(197,160,89,0.1)] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    {mode === 'signin' ? 'Sign In' : 'Create Account'}
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Mode Toggle */}
+            <div className="mt-6 pt-5 border-t border-[#1A1A1A] text-center">
+              <p className="text-sm text-[#555]">
+                {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}
+                <button
+                  onClick={() => {
+                    setMode(mode === 'signin' ? 'signup' : 'signin');
+                    setError(null);
+                  }}
+                  className="text-gold hover:text-gold-muted font-medium ml-1.5 transition-colors"
+                >
+                  {mode === 'signin' ? 'Sign up' : 'Sign in'}
+                </button>
+              </p>
+            </div>
           </div>
+
+          {/* Footer */}
+          <p className="text-[10px] text-[#333] text-center mt-6">
+            By continuing, you agree to PropAI's Terms of Service and Privacy Policy.
+          </p>
         </motion.div>
       </div>
     </motion.div>

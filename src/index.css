@@ -18,6 +18,21 @@
   body {
     @apply font-sans text-[#F5F5F5] bg-[#050505] antialiased;
   }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Custom scrollbar */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @layer components {
@@ -30,7 +45,13 @@
   .markdown-body ul { @apply list-disc list-inside; }
   
   .luxury-button {
-    @apply flex items-center justify-center gap-2 bg-gold text-[#050505] border border-gold hover:bg-gold-muted px-4 py-2 rounded font-bold uppercase tracking-widest text-[10px] transition-all;
+    @apply flex items-center justify-center gap-2 bg-gold text-[#050505] border border-gold hover:bg-gold-muted px-4 py-2 rounded font-bold uppercase tracking-widest text-[10px] transition-all cursor-pointer select-none;
+  }
+
+  @media (max-width: 640px) {
+    .luxury-button {
+      @apply py-2.5;
+    }
   }
   
   .luxury-card {

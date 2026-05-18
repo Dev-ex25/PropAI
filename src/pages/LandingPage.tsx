@@ -63,13 +63,13 @@ export default function LandingPage({ onLogin, onSignUp, onPricing, error }: Lan
             <Logo className="w-5 h-5" />
             <span className="text-base font-sans font-medium tracking-tight text-white">PropAI</span>
           </div>
-          <div className="hidden sm:flex items-center gap-4 text-[9px] uppercase tracking-widest font-bold text-[#666]">
+          <div className="hidden sm:flex items-center gap-4 text-[9px] uppercase tracking-widest font-bold text-[#888]">
             <button onClick={onPricing} className="hover:text-gold transition-colors">Pricing</button>
             <button onClick={onLogin} className="luxury-button px-4 py-1.5 text-[9px]">Sign In</button>
           </div>
           <button
             onClick={() => setMobileNavOpen(!mobileNavOpen)}
-            className="sm:hidden p-2 rounded-lg text-[#666] hover:text-white hover:bg-[#1A1A1A] transition-all"
+            className="sm:hidden p-2 rounded-lg text-[#888] hover:text-white hover:bg-[#1A1A1A] transition-all"
           >
             {mobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -109,7 +109,7 @@ export default function LandingPage({ onLogin, onSignUp, onPricing, error }: Lan
                 delay: 0.4,
                 ease: [0.21, 0.45, 0.32, 0.9]
               }}
-              className="text-sm sm:text-base lg:text-lg text-[#666] max-w-xl leading-relaxed px-2"
+              className="text-sm sm:text-base lg:text-lg text-[#888] max-w-xl leading-relaxed px-2"
             >
               Automate communication, organize scheduling, and follow up with leads across Gmail and WhatsApp — effortlessly.
             </motion.p>
@@ -167,7 +167,7 @@ export default function LandingPage({ onLogin, onSignUp, onPricing, error }: Lan
               className="text-center"
             >
               <p className="text-2xl sm:text-3xl font-sans text-white mb-1">{stat.value}</p>
-              <p className="text-[9px] sm:text-[10px] text-[#666] uppercase tracking-[0.2em] font-bold">{stat.label}</p>
+              <p className="text-[9px] sm:text-[10px] text-[#888] uppercase tracking-[0.2em] font-bold">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -204,7 +204,7 @@ export default function LandingPage({ onLogin, onSignUp, onPricing, error }: Lan
                   'Managing disconnected property data in spreadsheets',
                   'Losing track of lead intent across multiple apps',
                 ].map((item) => (
-                  <li key={item} className="flex gap-3 sm:gap-4 items-start text-[#666] line-through decoration-red-900/50 text-sm sm:text-base">
+                  <li key={item} className="flex gap-3 sm:gap-4 items-start text-[#888] line-through decoration-red-900/50 text-sm sm:text-base">
                     <div className="w-5 h-5 rounded-full border border-red-900 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-[10px]">✕</span>
                     </div>
@@ -254,7 +254,7 @@ export default function LandingPage({ onLogin, onSignUp, onPricing, error }: Lan
                 className="bg-[#0A0A0A] p-6 sm:p-8 rounded-2xl border border-[#1A1A1A] hover:border-gold/20 transition-all group shadow-lg"
               >
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#111] rounded-xl flex items-center justify-center mb-4 sm:mb-6 border border-[#222] group-hover:border-gold/20 group-hover:bg-gold/5 transition-all">
-                  <feature.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#444] group-hover:text-gold transition-colors" />
+                  <feature.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#777] group-hover:text-gold transition-colors" />
                 </div>
                 <h3 className="font-sans text-lg sm:text-xl text-white mb-2 sm:mb-3">{feature.title}</h3>
                 <p className="text-sm text-[#A0A0A0] leading-relaxed">{feature.desc}</p>
@@ -276,7 +276,7 @@ export default function LandingPage({ onLogin, onSignUp, onPricing, error }: Lan
             className="space-y-6 sm:space-y-8"
           >
             <h2 className="text-2xl sm:text-4xl lg:text-6xl font-sans text-white leading-tight">Elevate Your Agency with the <span className="text-gold">PropAI Protocol.</span></h2>
-            <p className="text-[#666] text-xs max-w-xl mx-auto leading-relaxed uppercase tracking-[0.2em] font-bold">Reclaim your time. Scale your portfolio. Close faster.</p>
+            <p className="text-[#888] text-xs max-w-xl mx-auto leading-relaxed uppercase tracking-[0.2em] font-bold">Reclaim your time. Scale your portfolio. Close faster.</p>
 
             <button onClick={onSignUp} className="luxury-button px-8 sm:px-10 py-4 sm:py-5 text-[10px] shadow-[0_0_30px_rgba(197,160,89,0.2)] mx-auto">
                Get Started <ArrowRight className="w-3 h-3 ml-2" />
@@ -286,7 +286,7 @@ export default function LandingPage({ onLogin, onSignUp, onPricing, error }: Lan
               <div className="mt-4 p-5 sm:p-6 bg-[#0A0A0A]/50 backdrop-blur-sm border border-[#1A1A1A] rounded-xl max-w-xl mx-auto relative overflow-hidden">
                 <div className="relative z-10">
                   <h3 className="text-base sm:text-lg font-sans text-white mb-2 tracking-tight">Absolute Simplicity</h3>
-                  <p className="text-xs sm:text-sm text-[#444] font-sans leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#777] font-sans leading-relaxed">
                     PropAI integrates into your existing business flow with <span className="text-gold/40">zero friction.</span>
                   </p>
                 </div>
@@ -307,7 +307,7 @@ export default function LandingPage({ onLogin, onSignUp, onPricing, error }: Lan
               <Logo className="w-4 h-4" />
               <span className="text-[10px] font-sans text-white font-black uppercase tracking-[0.2em] opacity-60">PropAI Operations</span>
            </div>
-           <p className="text-[7px] text-[#222] uppercase tracking-[0.4em] font-black">&copy; 2026 PROPAI LTD. INTEL SECURED.</p>
+           <p className="text-[7px] text-[#555] uppercase tracking-[0.4em] font-black">&copy; 2026 PROPAI LTD. INTEL SECURED.</p>
         </div>
       </footer>
     </div>

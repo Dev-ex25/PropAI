@@ -66,7 +66,7 @@ export default function Database({ user }: { user: User }) {
     <div className="space-y-6 sm:space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div className="relative flex-1 max-w-full sm:max-w-sm">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#444] w-3.5 h-3.5" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#777] w-3.5 h-3.5" />
           <input
             type="text"
             placeholder="Search operational data..."
@@ -89,7 +89,7 @@ export default function Database({ user }: { user: User }) {
             </div>
             <div>
                <p className="text-[10px] sm:text-[11px] text-white font-medium uppercase tracking-tight">AI Context Enabled</p>
-               <p className="text-[8px] sm:text-[9px] text-[#666] uppercase tracking-widest mt-0.5 font-bold">Records synthesized for real-time inquiries.</p>
+               <p className="text-[8px] sm:text-[9px] text-[#888] uppercase tracking-widest mt-0.5 font-bold">Records synthesized for real-time inquiries.</p>
             </div>
          </div>
       </div>
@@ -172,7 +172,7 @@ export default function Database({ user }: { user: User }) {
 
       {loading ? (
         <div className="flex justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-[#333]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#888]" />
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
@@ -187,7 +187,7 @@ export default function Database({ user }: { user: User }) {
                 {listing.imageUrl ? (
                   <img src={listing.imageUrl} alt={listing.address} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                 ) : (
-                  <Home className="w-12 h-12 sm:w-16 sm:h-16 text-[#222] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 group-hover:scale-110 group-hover:text-gold/5 transition-all duration-700" />
+                  <Home className="w-12 h-12 sm:w-16 sm:h-16 text-[#555] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 group-hover:scale-110 group-hover:text-gold/5 transition-all duration-700" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent opacity-60" />
                 <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
@@ -201,8 +201,8 @@ export default function Database({ user }: { user: User }) {
                   <p className="text-lg sm:text-xl font-sans text-white font-medium">${listing.price.toLocaleString()}</p>
                   <span className="text-[7px] sm:text-[8px] text-gold uppercase tracking-[0.2em] font-black">Active Asset</span>
                 </div>
-                <p className="text-[11px] sm:text-xs text-[#666] font-medium tracking-tight line-clamp-1">{listing.address}</p>
-                <div className="flex items-center gap-4 text-[8px] sm:text-[9px] uppercase tracking-[0.15em] text-[#333] pt-3 border-t border-[#111] font-black">
+                <p className="text-[11px] sm:text-xs text-[#888] font-medium tracking-tight line-clamp-1">{listing.address}</p>
+                <div className="flex items-center gap-4 text-[8px] sm:text-[9px] uppercase tracking-[0.15em] text-[#888] pt-3 border-t border-[#111] font-black">
                   <span className="flex items-center gap-1.5"><strong className="text-white text-[10px] sm:text-xs">{listing.bedrooms}</strong> BEDS</span>
                   <span className="flex items-center gap-1.5"><strong className="text-white text-[10px] sm:text-xs">{listing.bathrooms}</strong> BATHS</span>
                 </div>
@@ -211,9 +211,9 @@ export default function Database({ user }: { user: User }) {
           ))}
           {listings.length === 0 && !loading && (
             <div className="col-span-full text-center py-16 sm:py-20 bg-[#0A0A0A] rounded-2xl border border-dashed border-[#1A1A1A]">
-               <Home className="w-10 h-10 sm:w-12 sm:h-12 text-[#222] mx-auto mb-4" />
+               <Home className="w-10 h-10 sm:w-12 sm:h-12 text-[#555] mx-auto mb-4" />
                <h3 className="text-base sm:text-lg font-sans text-[#A0A0A0]">Portfolio Empty</h3>
-               <p className="text-xs sm:text-sm text-[#666] mt-2">Initialize your first luxury listing above.</p>
+               <p className="text-xs sm:text-sm text-[#888] mt-2">Initialize your first luxury listing above.</p>
             </div>
           )}
         </div>

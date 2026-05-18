@@ -78,7 +78,7 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-50 p-2.5 rounded-xl text-[#444] hover:text-white hover:bg-[#1A1A1A] transition-all"
+        className="absolute top-4 right-4 z-50 p-2.5 rounded-xl text-[#777] hover:text-white hover:bg-[#1A1A1A] transition-all"
       >
         <X className="w-5 h-5" />
       </button>
@@ -103,7 +103,7 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
             <h1 className="text-xl sm:text-2xl font-sans text-white font-medium tracking-tight text-center">
               {mode === 'signin' ? 'Welcome back' : 'Create your account'}
             </h1>
-            <p className="text-[#555] text-sm mt-2 text-center">
+            <p className="text-[#888] text-sm mt-2 text-center">
               {mode === 'signin'
                 ? 'Sign in to access your PropAI dashboard'
                 : 'Get started with PropAI in seconds'}
@@ -133,7 +133,7 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
             {/* Divider */}
             <div className="flex items-center gap-3 my-6">
               <div className="h-px bg-[#1A1A1A] flex-1" />
-              <span className="text-xs text-[#333] font-medium">or</span>
+              <span className="text-xs text-[#666] font-medium">or</span>
               <div className="h-px bg-[#1A1A1A] flex-1" />
             </div>
 
@@ -157,7 +157,7 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
                         placeholder="First"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
-                        className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#333] focus:border-gold/40 outline-none transition-all"
+                        className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#666] focus:border-gold/40 outline-none transition-all"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -168,7 +168,7 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
                         placeholder="Last"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
-                        className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#333] focus:border-gold/40 outline-none transition-all"
+                        className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#666] focus:border-gold/40 outline-none transition-all"
                       />
                     </div>
                   </motion.div>
@@ -178,14 +178,14 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
               <div className="space-y-1.5">
                 <label className="text-[11px] font-medium text-[#888] px-0.5">Email</label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#444]" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#777]" />
                   <input
                     type="email"
                     required
                     placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-[#333] focus:border-gold/40 outline-none transition-all"
+                    className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-[#666] focus:border-gold/40 outline-none transition-all"
                   />
                 </div>
               </div>
@@ -193,19 +193,19 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
               <div className="space-y-1.5">
                 <label className="text-[11px] font-medium text-[#888] px-0.5">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#444]" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#777]" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
                     placeholder="Min. 6 characters"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl pl-11 pr-12 py-3 text-sm text-white placeholder:text-[#333] focus:border-gold/40 outline-none transition-all"
+                    className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl pl-11 pr-12 py-3 text-sm text-white placeholder:text-[#666] focus:border-gold/40 outline-none transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#444] hover:text-[#888] transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#777] hover:text-[#888] transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -240,7 +240,7 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
 
             {/* Mode Toggle */}
             <div className="mt-6 pt-5 border-t border-[#1A1A1A] text-center">
-              <p className="text-sm text-[#555]">
+              <p className="text-sm text-[#888]">
                 {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}
                 <button
                   onClick={() => {
@@ -256,7 +256,7 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
           </div>
 
           {/* Footer */}
-          <p className="text-[10px] text-[#333] text-center mt-6">
+          <p className="text-[10px] text-[#666] text-center mt-6">
             By continuing, you agree to PropAI's Terms of Service and Privacy Policy.
           </p>
         </motion.div>

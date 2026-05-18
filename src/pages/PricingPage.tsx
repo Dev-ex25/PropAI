@@ -69,7 +69,7 @@ export default function PricingPage({ onBack, onSignUp }: PricingPageProps) {
           </div>
           <button
             onClick={onBack}
-            className="p-2 sm:p-1.5 rounded-xl text-[#333] hover:text-white hover:bg-[#1A1A1A] transition-all"
+            className="p-2 sm:p-1.5 rounded-xl text-[#888] hover:text-white hover:bg-[#1A1A1A] transition-all"
           >
             <X className="w-5 h-5" />
           </button>
@@ -89,7 +89,7 @@ export default function PricingPage({ onBack, onSignUp }: PricingPageProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-[#444] uppercase tracking-[0.3em] font-bold text-[7px] sm:text-[8px]"
+            className="text-[#777] uppercase tracking-[0.3em] font-bold text-[7px] sm:text-[8px]"
           >
             Choose your protocol for autonomous growth.
           </motion.p>
@@ -120,17 +120,17 @@ export default function PricingPage({ onBack, onSignUp }: PricingPageProps) {
 
               <div className="relative z-10">
                 <div className="mb-4 sm:mb-6">
-                  <h3 className={`text-[7px] sm:text-[8px] uppercase tracking-[0.3em] font-black mb-2 ${plan.highlight ? 'text-gold' : 'text-[#444]'}`}>
+                  <h3 className={`text-[7px] sm:text-[8px] uppercase tracking-[0.3em] font-black mb-2 ${plan.highlight ? 'text-gold' : 'text-[#777]'}`}>
                     {plan.name}
                   </h3>
                   <div className="flex items-baseline gap-1 mb-1">
                     <span className="text-2xl sm:text-3xl lg:text-4xl font-sans text-white font-medium tracking-tighter">${plan.price}</span>
-                    <span className="text-[#666] text-[10px] sm:text-xs">{plan.period}</span>
+                    <span className="text-[#888] text-[10px] sm:text-xs">{plan.period}</span>
                   </div>
                   {plan.savings && (
                     <p className="text-[8px] sm:text-[9px] text-green-500/80 font-bold uppercase tracking-wider mb-2">{plan.savings}</p>
                   )}
-                  <p className="text-[#666] text-[10px] sm:text-[11px] leading-relaxed">{plan.description}</p>
+                  <p className="text-[#888] text-[10px] sm:text-[11px] leading-relaxed">{plan.description}</p>
                 </div>
 
                 <div className="h-px bg-[#1A1A1A] w-full mb-4 sm:mb-6" />
@@ -149,7 +149,7 @@ export default function PricingPage({ onBack, onSignUp }: PricingPageProps) {
                   className={`w-full py-3 sm:py-3.5 rounded-lg text-[7px] sm:text-[8px] uppercase font-black tracking-[0.2em] transition-all flex items-center justify-center gap-2 group/btn ${
                     plan.highlight
                       ? 'luxury-button shadow-[0_0_15px_rgba(197,160,89,0.1)]'
-                      : 'bg-[#0D0D0D] border border-[#1A1A1A] text-[#666] hover:border-gold/30 hover:text-gold'
+                      : 'bg-[#0D0D0D] border border-[#1A1A1A] text-[#888] hover:border-gold/30 hover:text-gold'
                   }`}
                 >
                   Deploy Plan <ArrowRight className="w-2 h-2 sm:w-2.5 sm:h-2.5 group-hover/btn:translate-x-1 transition-transform" />

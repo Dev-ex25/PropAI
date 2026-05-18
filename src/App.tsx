@@ -125,14 +125,14 @@ export default function App() {
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(false)}
-          className="md:hidden p-1.5 rounded-lg text-[#444] hover:text-white hover:bg-[#1A1A1A] transition-all"
+          className="md:hidden p-1.5 rounded-lg text-[#777] hover:text-white hover:bg-[#1A1A1A] transition-all"
         >
           <X className="w-5 h-5" />
         </button>
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
-        <p className={`${!isSidebarOpen ? 'hidden' : ''} text-[8px] uppercase tracking-[0.3em] text-[#444] mb-3 px-2 font-black`}>Operations</p>
+        <p className={`${!isSidebarOpen ? 'hidden' : ''} text-[8px] uppercase tracking-[0.3em] text-[#777] mb-3 px-2 font-black`}>Operations</p>
         {navItems.map((item) => (
           <button
             key={item.id}
@@ -140,7 +140,7 @@ export default function App() {
             className={`w-full flex items-center p-2.5 rounded-lg transition-all group ${
               currentPage === item.id
               ? 'bg-gold/10 text-gold border border-gold/20'
-              : 'text-[#666] hover:text-white hover:bg-[#111]'
+              : 'text-[#888] hover:text-white hover:bg-[#111]'
             }`}
             title={!isSidebarOpen ? item.label : ''}
           >
@@ -152,7 +152,7 @@ export default function App() {
 
       <div className="p-4 border-t border-[#1A1A1A] bg-[#070707]">
         <div className={`${!isSidebarOpen ? 'hidden' : ''} bg-[#111111] p-3 rounded-xl border border-[#222] mb-4`}>
-          <p className="text-[8px] text-[#444] mb-1 font-sans uppercase tracking-widest font-black">Efficiency</p>
+          <p className="text-[8px] text-[#777] mb-1 font-sans uppercase tracking-widest font-black">Efficiency</p>
           <p className="text-lg font-light text-white">88%</p>
           <div className="w-full bg-[#222] h-1 mt-2 rounded-full overflow-hidden">
             <div className="bg-gold h-full w-[88%] shadow-[0_0_8px_rgba(197,160,89,0.4)]"></div>
@@ -169,7 +169,7 @@ export default function App() {
         </div>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center p-2.5 rounded-lg text-[#444] hover:text-red-500 hover:bg-red-500/5 transition-all group"
+          className="w-full flex items-center p-2.5 rounded-lg text-[#777] hover:text-red-500 hover:bg-red-500/5 transition-all group"
           title={!isSidebarOpen ? "Logout" : ''}
         >
           <LogOut className={`w-4 h-4 shrink-0 transition-transform ${isSidebarOpen ? 'mr-3' : 'mx-auto'} group-hover:rotate-12`} />
@@ -216,7 +216,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="md:hidden p-1.5 rounded-lg text-[#666] hover:text-white hover:bg-[#1A1A1A] transition-all"
+              className="md:hidden p-1.5 rounded-lg text-[#888] hover:text-white hover:bg-[#1A1A1A] transition-all"
             >
               <Menu className="w-5 h-5" />
             </button>

@@ -79,7 +79,7 @@ export default function CalendarPage({ user, token }: { user: User, token: strin
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-10">
         <div className="lg:col-span-2 space-y-4 sm:space-y-6">
            <div className="flex items-center justify-between mb-2">
-              <h4 className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-[#666] font-bold flex items-center gap-2">
+              <h4 className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-[#888] font-bold flex items-center gap-2">
                  <div className="w-2 h-2 bg-gold/40 rounded-full" /> Verified Sessions
               </h4>
               {token && <span className="text-[9px] sm:text-[10px] text-gold font-bold uppercase tracking-widest bg-gold/5 px-2 py-0.5 border border-gold/10 rounded hidden sm:inline">Live Google Sync</span>}
@@ -97,7 +97,7 @@ export default function CalendarPage({ user, token }: { user: User, token: strin
 
           {loading && token ? (
             <div className="flex justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-[#333]" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#888]" />
             </div>
           ) : (
             <div className="space-y-3 sm:space-y-4">
@@ -124,7 +124,7 @@ export default function CalendarPage({ user, token }: { user: User, token: strin
                          <h4 className="text-base sm:text-lg font-sans font-medium text-white group-hover:text-gold transition-colors truncate">{event.summary}</h4>
                          <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold/30 flex-shrink-0" title="PropAI Secured" />
                       </div>
-                      <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-[9px] sm:text-[10px] uppercase tracking-widest text-[#666]">
+                      <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-[9px] sm:text-[10px] uppercase tracking-widest text-[#888]">
                         <span className="flex items-center gap-1.5 sm:gap-2"><Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                           {event.start.dateTime ? new Date(event.start.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'All Day'}
                         </span>
@@ -138,10 +138,10 @@ export default function CalendarPage({ user, token }: { user: User, token: strin
               ) : (
                 <div className="text-center py-16 sm:py-24 bg-[#0A0A0A] rounded-2xl sm:rounded-3xl border border-dashed border-[#1A1A1A]">
                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border border-[#1A1A1A] flex items-center justify-center mx-auto mb-4 sm:mb-6 bg-[#070707]">
-                      <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A]" />
+                      <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[#555]" />
                    </div>
-                   <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[#333] font-bold">Horizon Clear</p>
-                   <p className="text-[7px] sm:text-[8px] uppercase tracking-widest text-[#222] mt-2">No upcoming sessions detected</p>
+                   <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[#888] font-bold">Horizon Clear</p>
+                   <p className="text-[7px] sm:text-[8px] uppercase tracking-widest text-[#555] mt-2">No upcoming sessions detected</p>
                 </div>
               )}
             </div>
@@ -159,13 +159,13 @@ export default function CalendarPage({ user, token }: { user: User, token: strin
                        <div className="flex justify-between items-start mb-2">
                           <p className="text-[10px] sm:text-xs font-bold text-white uppercase">{slot.day}</p>
                           <span className={`text-[7px] sm:text-[8px] font-black uppercase px-2 py-0.5 rounded ${
-                             slot.rating === 'Optimal' ? 'bg-gold/10 text-gold' : 'bg-[#111] text-[#666]'
+                             slot.rating === 'Optimal' ? 'bg-gold/10 text-gold' : 'bg-[#111] text-[#888]'
                           }`}>
                             {slot.rating}
                           </span>
                        </div>
                        <p className="text-base sm:text-lg font-sans text-[#F5F5F5] mb-1 sm:mb-2">{slot.time}</p>
-                       <p className="text-[8px] sm:text-[9px] text-[#444] font-bold uppercase tracking-tight">{slot.reason}</p>
+                       <p className="text-[8px] sm:text-[9px] text-[#777] font-bold uppercase tracking-tight">{slot.reason}</p>
                     </div>
                  ))}
                  <button className="w-full py-3 sm:py-4 mt-2 bg-gold/5 border border-gold/10 text-gold text-[9px] sm:text-[10px] uppercase tracking-[0.3em] font-black rounded-xl hover:bg-gold/10 transition-all">

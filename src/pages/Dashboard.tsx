@@ -15,10 +15,10 @@ export default function Dashboard({ user }: { user: User }) {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
         <div>
           <h3 className="text-xl sm:text-2xl font-sans font-medium text-white tracking-tight">Executive Hub</h3>
-          <p className="text-[#666] text-[10px] sm:text-xs mt-1 uppercase tracking-widest font-medium">Operational overview for PropAI Protocol.</p>
+          <p className="text-[#888] text-[10px] sm:text-xs mt-1 uppercase tracking-widest font-medium">Operational overview for PropAI Protocol.</p>
         </div>
         <div className="text-left sm:text-right">
-          <p className="text-[8px] text-[#444] uppercase tracking-[0.3em] font-black mb-1">Health</p>
+          <p className="text-[8px] text-[#777] uppercase tracking-[0.3em] font-black mb-1">Health</p>
           <div className="flex items-center gap-1.5 text-gold text-[9px] font-black uppercase tracking-widest">
             <div className="w-1 h-1 bg-gold rounded-full animate-pulse shadow-[0_0_8px_rgba(197,160,89,1)]" />
             Active Sync
@@ -43,7 +43,7 @@ export default function Dashboard({ user }: { user: User }) {
               <span className="text-[8px] sm:text-[9px] text-gold font-black">{stat.trend}</span>
             </div>
             <div>
-              <p className="text-[8px] sm:text-[9px] uppercase tracking-widest text-[#444] font-black mb-0.5">{stat.label}</p>
+              <p className="text-[8px] sm:text-[9px] uppercase tracking-widest text-[#777] font-black mb-0.5">{stat.label}</p>
               <p className="text-lg sm:text-xl lg:text-2xl font-sans text-white font-medium">{stat.value}</p>
             </div>
           </motion.div>
@@ -73,11 +73,11 @@ export default function Dashboard({ user }: { user: User }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-2">
                       <p className="text-[10px] sm:text-xs font-bold text-white uppercase tracking-tight truncate">{log.action}</p>
-                      <span className="text-[7px] sm:text-[8px] text-[#444] font-black uppercase flex-shrink-0">{log.time}</span>
+                      <span className="text-[7px] sm:text-[8px] text-[#777] font-black uppercase flex-shrink-0">{log.time}</span>
                     </div>
-                    <p className="text-[9px] sm:text-[10px] text-[#666] mt-0.5 truncate">{log.details}</p>
+                    <p className="text-[9px] sm:text-[10px] text-[#888] mt-0.5 truncate">{log.details}</p>
                     <div className="flex items-center gap-2 mt-1.5">
-                      <span className="text-[7px] sm:text-[8px] text-white/50 font-bold px-2 py-0.5 bg-[#1A1A1A] rounded tracking-wide uppercase">TGT: {log.target}</span>
+                      <span className="text-[7px] sm:text-[8px] text-white/70 font-bold px-2 py-0.5 bg-[#1A1A1A] rounded tracking-wide uppercase">TGT: {log.target}</span>
                     </div>
                   </div>
                </div>
@@ -108,7 +108,7 @@ export default function Dashboard({ user }: { user: User }) {
                 ].map((metric, i) => (
                   <div key={i}>
                     <div className="flex justify-between text-[7px] sm:text-[8px] uppercase font-black tracking-widest mb-1.5">
-                      <span className="text-[#444]">{metric.label}</span>
+                      <span className="text-[#777]">{metric.label}</span>
                       <span className="text-gold">{metric.value}</span>
                     </div>
                     <div className="h-1 w-full bg-[#111] rounded-full overflow-hidden">

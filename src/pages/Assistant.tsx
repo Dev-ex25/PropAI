@@ -82,7 +82,7 @@ export default function Assistant({ user }: { user: User }) {
            </div>
            <div>
               <h3 className="text-base sm:text-xl font-sans font-medium text-white tracking-tight uppercase">Operations</h3>
-              <p className="text-[7px] sm:text-[8px] text-[#444] uppercase tracking-[0.2em] font-black mt-0.5">Execution Interface</p>
+              <p className="text-[7px] sm:text-[8px] text-[#777] uppercase tracking-[0.2em] font-black mt-0.5">Execution Interface</p>
            </div>
         </div>
         <div className="flex gap-2">
@@ -134,7 +134,7 @@ export default function Assistant({ user }: { user: User }) {
                      ))}
                    </div>
                  )}
-                 <p className="text-[7px] sm:text-[8px] text-[#333] uppercase tracking-widest font-black">{msg.time}</p>
+                 <p className="text-[7px] sm:text-[8px] text-[#888] uppercase tracking-widest font-black">{msg.time}</p>
               </div>
             </motion.div>
           ))}
@@ -176,14 +176,14 @@ export default function Assistant({ user }: { user: User }) {
               </button>
            </div>
            <div className="flex items-center gap-3 sm:gap-4 mt-2 sm:mt-3 px-1">
-              <button className="flex items-center gap-1 sm:gap-1.5 text-[7px] sm:text-[8px] text-[#333] uppercase tracking-widest font-black hover:text-gold transition-colors">
+              <button className="flex items-center gap-1 sm:gap-1.5 text-[7px] sm:text-[8px] text-[#888] uppercase tracking-widest font-black hover:text-gold transition-colors">
                 <Building2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> Database
               </button>
-              <button className="flex items-center gap-1 sm:gap-1.5 text-[7px] sm:text-[8px] text-[#333] uppercase tracking-widest font-black hover:text-gold transition-colors">
+              <button className="flex items-center gap-1 sm:gap-1.5 text-[7px] sm:text-[8px] text-[#888] uppercase tracking-widest font-black hover:text-gold transition-colors">
                 <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> Schedule
               </button>
               <div className="flex-1" />
-              <p className="text-[6px] sm:text-[8px] text-[#333] uppercase font-black tracking-tighter hidden sm:block">PropAI v2.0 Operational Assistant</p>
+              <p className="text-[6px] sm:text-[8px] text-[#888] uppercase font-black tracking-tighter hidden sm:block">PropAI v2.0 Operational Assistant</p>
            </div>
         </div>
       </div>

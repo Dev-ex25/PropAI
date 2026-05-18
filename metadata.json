@@ -1,0 +1,6 @@
+{
+  "name": "PropAI Assistant",
+  "description": "AI-powered admin assistant for realtors handling buyer communication, listing descriptions, and scheduling.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,69 @@
+{
+  "entities": {
+    "Listing": {
+      "title": "Property Listing",
+      "description": "Details about a property for sale or rent.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "address": { "type": "string" },
+        "price": { "type": "number" },
+        "bedrooms": { "type": "integer" },
+        "bathrooms": { "type": "number" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "realtorId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["address", "price", "realtorId"]
+    },
+    "Lead": {
+      "title": "Buyer Lead",
+      "description": "Information about a potential buyer and their inquiry.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "message": { "type": "string" },
+        "propertyId": { "type": "string" },
+        "realtorId": { "type": "string" },
+        "status": { "type": "string", "enum": ["new", "contacted", "viewing_scheduled", "closed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "propertyId", "realtorId"]
+    },
+    "Viewing": {
+      "title": "Property Viewing",
+      "description": "A scheduled viewing for a property.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "propertyId": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "realtorId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "time": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "cancelled"] },
+        "calendarEventId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["propertyId", "buyerId", "realtorId", "date", "time"]
+    }
+  },
+  "firestore": {
+    "/listings/{listingId}": {
+      "schema": "Listing",
+      "description": "Store property listings."
+    },
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Store buyer inquiries."
+    },
+    "/viewings/{viewingId}": {
+      "schema": "Viewing",
+      "description": "Store scheduled viewings."
+    }
+  }
+}

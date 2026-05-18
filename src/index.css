@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-gold: #C5A059;
+  --color-gold-muted: #E8D4A2;
+  --color-dark-bg: #050505;
+  --color-dark-card: #0A0A0A;
+  --color-dark-border: #1A1A1A;
+  --color-dark-muted: #111111;
+}
+
+@layer base {
+  body {
+    @apply font-sans text-[#F5F5F5] bg-[#050505] antialiased;
+  }
+}
+
+@layer components {
+  .markdown-body {
+    @apply text-gray-300 leading-relaxed space-y-4;
+  }
+  .markdown-body h1 { @apply text-2xl font-sans font-bold text-white; }
+  .markdown-body h2 { @apply text-xl font-sans font-bold text-white; }
+  .markdown-body p { @apply text-sm; }
+  .markdown-body ul { @apply list-disc list-inside; }
+  
+  .luxury-button {
+    @apply flex items-center justify-center gap-2 bg-gold text-[#050505] border border-gold hover:bg-gold-muted px-4 py-2 rounded font-bold uppercase tracking-widest text-[10px] transition-all;
+  }
+  
+  .luxury-card {
+    @apply bg-dark-card border border-dark-border rounded-2xl p-6 shadow-2xl;
+  }
+}

@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidListing(data) {
+      return data.keys().hasAll(['address', 'price', 'realtorId']) &&
+             data.realtorId == request.auth.uid;
+    }
+
+    function isValidLead(data) {
+      return data.keys().hasAll(['name', 'email', 'propertyId', 'realtorId']) &&
+             data.realtorId is string;
+    }
+
+    function isValidViewing(data) {
+      return data.keys().hasAll(['propertyId', 'realtorId', 'buyerId', 'date', 'time']) &&
+             data.realtorId == request.auth.uid;
+    }
+
+    match /listings/{listingId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidListing(request.resource.data);
+      allow update, delete: if isSignedIn() && isOwner(resource.data.realtorId) && isValidListing(request.resource.data);
+    }
+
+    match /leads/{leadId} {
+      allow create: if true;
+      allow read, update, delete: if isSignedIn() && isOwner(resource.data.realtorId);
+    }
+
+    match /viewings/{viewingId} {
+      allow read, write: if isSignedIn() && (isOwner(resource.data.realtorId) || isOwner(request.resource.data.realtorId));
+    }
+  }
+}

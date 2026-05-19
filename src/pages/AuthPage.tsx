@@ -87,9 +87,12 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
     try {
       const { error: googleError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
+        options: {
+          redirectTo: window.location.origin,
+        },
       });
       if (googleError) throw googleError;
-      // OAuth will redirect, so onSuccess is handled by onAuthStateChange
+      // OAuth redirects away, then back. onAuthStateChange in App.tsx handles the rest.
     } catch (err: any) {
       setError(err.message || 'Google sign-in failed');
       setLoading(false);

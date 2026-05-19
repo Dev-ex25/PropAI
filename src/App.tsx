@@ -37,13 +37,32 @@ export default function App() {
 
   useEffect(() => {
     const { data: { subscription: authSub } } = supabase.auth.onAuthStateChange(
-      (_event, newSession) => {
+      (event, newSession) => {
         setSession(newSession);
         setUser(newSession?.user ?? null);
         if (!newSession) {
           setHasAccess(false);
           setSubscription(null);
           setCheckingAccess(false);
+        }
+        // After OAuth sign-in, ensure user record exists in users table
+        if (event === 'SIGNED_IN' && newSession?.user) {
+          (async () => {
+            const authUser = newSession.user;
+            const { data } = await supabase
+              .from('users')
+              .select('id')
+              .eq('id', authUser.id)
+              .maybeSingle();
+            if (!data) {
+              await supabase.from('users').insert({
+                id: authUser.id,
+                full_name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || authUser.email?.split('@')[0] || '',
+                email: authUser.email || '',
+                role: 'realtor',
+              });
+            }
+          })();
         }
       }
     );

@@ -28,12 +28,32 @@
   .markdown-body h2 { @apply text-xl font-sans font-bold text-white; }
   .markdown-body p { @apply text-sm; }
   .markdown-body ul { @apply list-disc list-inside; }
-  
+
   .luxury-button {
     @apply flex items-center justify-center gap-2 bg-gold text-[#050505] border border-gold hover:bg-gold-muted px-4 py-2 rounded font-bold uppercase tracking-widest text-[10px] transition-all;
   }
-  
+
   .luxury-card {
     @apply bg-dark-card border border-dark-border rounded-2xl p-6 shadow-2xl;
+  }
+
+  /* Custom form validation styling */
+  input:invalid {
+    @apply border-red-500/40;
+  }
+
+  input:valid {
+    @apply border-green-500/40;
+  }
+
+  /* Webkit validation popover styling */
+  input::-webkit-validation-bubble {
+    background-color: #0A0A0A !important;
+    border-color: #C5A059 !important;
+    color: #C5A059 !important;
+  }
+
+  input::-webkit-validation-bubble-arrow {
+    background-color: #0A0A0A !important;
   }
 }

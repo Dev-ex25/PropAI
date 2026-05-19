@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Mail, Lock, ArrowRight, Loader as Loader2, Eye, EyeOff } from 'lucide-react';
 import Logo from '../components/Logo';
+import ValidationToast from '../components/ValidationToast';
+import { useFormValidation } from '../hooks/useFormValidation';
 import { supabase } from '../lib/supabase';
 
 interface AuthPageProps {
@@ -19,6 +21,7 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const { errors, setFieldError, clearErrors, validateEmail, validatePassword, validateName } = useFormValidation();
 
   React.useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -29,8 +32,27 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    clearErrors();
     setError(null);
+
+    // Validate fields
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+
+    if (emailError) setFieldError('email', emailError);
+    if (passwordError) setFieldError('password', passwordError);
+
+    if (mode === 'signup') {
+      const firstNameError = validateName(firstName, 'First name');
+      const lastNameError = validateName(lastName, 'Last name');
+      if (firstNameError) setFieldError('firstName', firstNameError);
+      if (lastNameError) setFieldError('lastName', lastNameError);
+      if (firstNameError || lastNameError || emailError || passwordError) return;
+    } else {
+      if (emailError || passwordError) return;
+    }
+
+    setLoading(true);
 
     try {
       if (mode === 'signup') {
@@ -152,9 +174,17 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
                         required
                         placeholder="First"
                         value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#555] focus:border-gold/40 outline-none transition-all"
+                        onChange={(e) => {
+                          setFirstName(e.target.value);
+                          if (errors.firstName) setFieldError('firstName', null);
+                        }}
+                        className={`w-full bg-[#0D0D0D] border rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#555] outline-none transition-all ${
+                          errors.firstName ? 'border-red-500/40' : 'border-[#1A1A1A] focus:border-gold/40'
+                        }`}
                       />
+                      {errors.firstName && (
+                        <p className="text-[9px] text-red-400 font-medium">{errors.firstName}</p>
+                      )}
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-medium text-[#888] px-0.5">Last name</label>
@@ -163,9 +193,17 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
                         required
                         placeholder="Last"
                         value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#555] focus:border-gold/40 outline-none transition-all"
+                        onChange={(e) => {
+                          setLastName(e.target.value);
+                          if (errors.lastName) setFieldError('lastName', null);
+                        }}
+                        className={`w-full bg-[#0D0D0D] border rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#555] outline-none transition-all ${
+                          errors.lastName ? 'border-red-500/40' : 'border-[#1A1A1A] focus:border-gold/40'
+                        }`}
                       />
+                      {errors.lastName && (
+                        <p className="text-[9px] text-red-400 font-medium">{errors.lastName}</p>
+                      )}
                     </div>
                   </motion.div>
                 )}
@@ -180,10 +218,18 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
                     required
                     placeholder="you@example.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-[#555] focus:border-gold/40 outline-none transition-all"
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (errors.email) setFieldError('email', null);
+                    }}
+                    className={`w-full bg-[#0D0D0D] border rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-[#555] outline-none transition-all ${
+                      errors.email ? 'border-red-500/40' : 'border-[#1A1A1A] focus:border-gold/40'
+                    }`}
                   />
                 </div>
+                {errors.email && (
+                  <p className="text-[9px] text-red-400 font-medium">{errors.email}</p>
+                )}
               </div>
 
               <div className="space-y-1.5">
@@ -195,8 +241,13 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
                     required
                     placeholder="Min. 6 characters"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl pl-11 pr-12 py-3 text-sm text-white placeholder:text-[#555] focus:border-gold/40 outline-none transition-all"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (errors.password) setFieldError('password', null);
+                    }}
+                    className={`w-full bg-[#0D0D0D] border rounded-xl pl-11 pr-12 py-3 text-sm text-white placeholder:text-[#555] outline-none transition-all ${
+                      errors.password ? 'border-red-500/40' : 'border-[#1A1A1A] focus:border-gold/40'
+                    }`}
                   />
                   <button
                     type="button"
@@ -206,17 +257,14 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="text-[9px] text-red-400 font-medium">{errors.password}</p>
+                )}
               </div>
 
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-red-500/5 border border-red-500/20 rounded-xl px-4 py-3"
-                >
-                  <p className="text-xs text-red-400 font-medium">{error}</p>
-                </motion.div>
-              )}
+              <AnimatePresence>
+                {error && <ValidationToast message={error} type="error" visible={!!error} />}
+              </AnimatePresence>
 
               <button
                 type="submit"

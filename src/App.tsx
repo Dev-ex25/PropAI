@@ -29,6 +29,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [authInProgress, setAuthInProgress] = useState(false);
 
   // Subscription state
   const [hasAccess, setHasAccess] = useState(false);
@@ -40,6 +41,7 @@ export default function App() {
       (event, newSession) => {
         setSession(newSession);
         setUser(newSession?.user ?? null);
+        setAuthInProgress(false);
         if (!newSession) {
           setHasAccess(false);
           setSubscription(null);
@@ -74,6 +76,7 @@ export default function App() {
         setCheckingAccess(false);
       }
       setLoading(false);
+      setAuthInProgress(false);
     });
 
     return () => authSub.unsubscribe();
@@ -162,6 +165,8 @@ export default function App() {
 
   const handleAuthSuccess = () => {
     setShowAuth(false);
+    setShowPricing(false);
+    setAuthInProgress(true);
   };
 
   const handlePaymentSuccess = async (planName: 'monthly' | 'annual') => {
@@ -218,7 +223,7 @@ export default function App() {
   };
 
   // Loading screen
-  if (loading) {
+  if (loading || authInProgress) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#050505]">
         <Loader2 className="w-8 h-8 animate-spin text-gold" />

@@ -43,8 +43,47 @@ export default function Assistant({ user }: { user: any }) {
     setInput('');
     setIsTyping(true);
 
-    // Mocking response logic
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/reply-buyer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: input,
+          context: 'User is talking to the PropAI Operations Assistant inside the workspace dashboard.'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('API failed');
+      }
+
+      const data = await response.json();
+      
+      // Determine relevant contextual operational actions based on content
+      let actions: string[] = [];
+      const lowerReply = data.reply.toLowerCase();
+      const lowerInput = input.toLowerCase();
+      if (lowerReply.includes('listing') || lowerReply.includes('property') || lowerInput.includes('listing') || lowerInput.includes('property')) {
+        actions = ['Initialize New Listing', 'Search Database'];
+      } else if (lowerReply.includes('schedule') || lowerReply.includes('meet') || lowerReply.includes('calendar') || lowerInput.includes('schedule') || lowerInput.includes('meet') || lowerInput.includes('viewing')) {
+        actions = ['Review Suggested Slots', 'Draft Outreach'];
+      } else if (lowerReply.includes('lead') || lowerReply.includes('inquiry') || lowerInput.includes('lead') || lowerInput.includes('inquiry') || lowerInput.includes('follow-up')) {
+        actions = ['Execute Nudge Protocol', 'Review Scripts'];
+      }
+
+      const assistantMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: data.reply,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        actions: actions.length > 0 ? actions : undefined
+      };
+      setMessages(prev => [...prev, assistantMsg]);
+    } catch (err) {
+      console.warn('Real AI assistant fetch failed, using built-in offline core logic:', err);
+      // Fallback matching logic
       let response = "I've processed your request. How would you like me to proceed?";
       let actions: string[] = [];
 
@@ -68,8 +107,9 @@ export default function Assistant({ user }: { user: any }) {
         actions
       };
       setMessages(prev => [...prev, assistantMsg]);
+    } finally {
       setIsTyping(false);
-    }, 1200);
+    }
   };
 
   return (

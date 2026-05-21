@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, Home, MoreVertical, Loader2, Zap } from 'lucide-react';
+import { Plus, Search, Home, MoreVertical, Loader2, Zap, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface Listing {
@@ -17,6 +17,7 @@ export default function Database({ user }: { user: any }) {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [newListing, setNewListing] = useState({
     address: '',
     price: 0,
@@ -25,6 +26,36 @@ export default function Database({ user }: { user: any }) {
     description: '',
     imageUrl: ''
   });
+
+  const generateAIDescription = async () => {
+    if (!newListing.address) {
+      alert("Please provide at least a property address first.");
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const details = `${newListing.address}. Price: $${newListing.price}. Bedrooms: ${newListing.bedrooms}. Bathrooms: ${newListing.bathrooms}.`;
+      const response = await fetch('/api/generate-listing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ propertyDetails: details })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setNewListing(prev => ({ ...prev, description: data.description }));
+      } else {
+        throw new Error('Fallback to raw draft');
+      }
+    } catch (err) {
+      console.warn("Gemini description failed, using offline template:", err);
+      setNewListing(prev => ({
+        ...prev,
+        description: `Exquisite luxury residence located at ${newListing.address}. Featuring ${newListing.bedrooms} bedrooms, ${newListing.bathrooms} bathrooms, and beautifully proportioned spaces tailored for high-end comfort.`
+      }));
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   useEffect(() => {
     // Mock fetch from local storage or static data
@@ -150,12 +181,23 @@ export default function Database({ user }: { user: any }) {
                </div>
              </div>
              <div className="md:col-span-2">
-               <label className="block text-[10px] uppercase tracking-widest text-[#A0A0A0] mb-2 font-bold">Curated Details</label>
+               <div className="flex items-center justify-between mb-2">
+                 <label className="block text-[10px] uppercase tracking-widest text-[#A0A0A0] font-bold">Curated Details</label>
+                 <button
+                   type="button"
+                   onClick={generateAIDescription}
+                   disabled={isGenerating}
+                   className="text-[9px] uppercase font-black tracking-[0.2em] text-gold hover:opacity-80 flex items-center gap-2 transition-all disabled:opacity-30"
+                 >
+                   {isGenerating ? <Loader2 className="w-3 h-3 animate-spin text-gold" /> : <Sparkles className="w-3 h-3 text-gold" />}
+                   Generate Description
+                 </button>
+               </div>
                <textarea 
                  value={newListing.description}
                  onChange={e => setNewListing({...newListing, description: e.target.value})}
-                 className="w-full px-4 py-3 bg-[#050505] border border-[#1A1A1A] rounded-xl focus:border-gold outline-none h-24 text-white transition-all resize-none"
-                 placeholder="Feature highlights..."
+                 className="w-full px-4 py-3 bg-[#050505] border border-[#1A1A1A] rounded-xl focus:border-gold outline-none h-24 text-white transition-all resize-none text-xs"
+                 placeholder="Drafting high-end feature highlights..."
                />
              </div>
              <div className="md:col-span-2 flex justify-end gap-4 mt-2">

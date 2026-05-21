@@ -62,8 +62,27 @@ export default function Leads({ user }: { user: any }) {
   const generateAIReply = async () => {
     if (!selectedLead) return;
     setIsGenerating(true);
-    // Mocking the behavior for now to ensure reliability
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/reply-buyer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: selectedLead.message,
+          context: `Lead Name: ${selectedLead.name}, Property ID: ${selectedLead.propertyId}, Detected Intent: ${selectedLead.detectedIntent}`
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('API route failed, falling back to secure protocol.');
+      }
+
+      const data = await response.json();
+      setReplyText(data.reply);
+    } catch (error) {
+      console.warn('Real Gemini API failed, using cached secure fallback:', error);
+      // Mocking the behavior for now to ensure reliability
       let reply = "";
       switch(selectedLead.detectedIntent) {
         case 'pricing': reply = `Hello ${selectedLead.name}, I've checked the current records for the property (ID: ${selectedLead.propertyId}). It is currently listed at the requested luxury valuation. Exclusive financing options are also available for this asset.`; break;
@@ -72,8 +91,9 @@ export default function Leads({ user }: { user: any }) {
         default: reply = `Hello ${selectedLead.name}, thank you for your inquiry regarding property ID ${selectedLead.propertyId}. I'm the PropAI assistant and I've flagged this for priority review. How else can I assist you today?`;
       }
       setReplyText(reply);
+    } finally {
       setIsGenerating(false);
-    }, 1000);
+    }
   };
 
   const getIntentIcon = (intent?: string) => {

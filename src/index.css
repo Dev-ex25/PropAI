@@ -1,8 +1,10 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-satoshi: "Satoshi", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
@@ -14,9 +16,50 @@
   --color-dark-muted: #111111;
 }
 
+/* Prevent horizontal overflow globally and enable smooth scrolling */
+html, body, #root {
+  max-width: 100%;
+  width: 100%;
+  overflow-x: hidden !important;
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+/* Force visible, styled webkit scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  display: block !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #050508;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #232338;
+  border: 2px solid #050508;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A059;
+}
+
+/* Firefox compatibility */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #232338 #050508;
+  scroll-behavior: smooth;
+}
+
 @layer base {
   body {
     @apply font-sans text-[#F5F5F5] bg-[#050505] antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-satoshi tracking-tight;
   }
 }
 

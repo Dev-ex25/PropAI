@@ -1,0 +1,189 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Database user profile for realtors",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "full_name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "email"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "Customer prospect lead records",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "full_name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "budget": { "type": "number" },
+        "preferred_location": { "type": "string" },
+        "assigned_user_id": { "type": "string" },
+        "pipeline_stage": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "full_name", "email"]
+    },
+    "Property": {
+      "title": "Property",
+      "description": "Real estate properties listings managed by realtors",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "property_type": { "type": "string" },
+        "location": { "type": "string" },
+        "realtor_id": { "type": "string" },
+        "image_url": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "title", "price"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "AI and client message exchanges",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "lead_id": { "type": "string" },
+        "message_content": { "type": "string" },
+        "sender_type": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "lead_id", "message_content", "sender_type"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Realtor and buyer scheduled walkthrough alignments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "lead_id": { "type": "string" },
+        "property_id": { "type": "string" },
+        "appointment_date": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "lead_id", "property_id", "appointment_date"]
+    },
+    "Deal": {
+      "title": "Deal",
+      "description": "Pipeline deals and revenue analytics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "lead_id": { "type": "string" },
+        "property_id": { "type": "string" },
+        "deal_value": { "type": "number" },
+        "deal_stage": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "deal_value", "deal_stage"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Operational checklists for realtors",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "assigned_user_id": { "type": "string" },
+        "lead_id": { "type": "string" },
+        "task_title": { "type": "string" },
+        "due_date": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "task_title"]
+    },
+    "AIMemory": {
+      "title": "AIMemory",
+      "description": "AI neural short-term memory traces and buyer persona hints",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "entity_id": { "type": "string" },
+        "raw_content": { "type": "string" },
+        "embedding_vector": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "entity_id", "raw_content"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Agent-related warnings and system events",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "content": { "type": "string" },
+        "read_status": { "type": "boolean" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "user_id", "content"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "Realtor membership billing statuses",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "plan_name": { "type": "string" },
+        "billing_status": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "user_id", "plan_name"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Realtor profile details"
+    },
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Buying leads"
+    },
+    "/properties/{propertyId}": {
+      "schema": "Property",
+      "description": "Property listings records"
+    },
+    "/conversations/{conversationId}": {
+      "schema": "Conversation",
+      "description": "Lead and AI assistant conversation items"
+    },
+    "/appointments/{appointmentId}": {
+      "schema": "Appointment",
+      "description": "Walkthrough appointments"
+    },
+    "/deals/{dealId}": {
+      "schema": "Deal",
+      "description": "Property deals tracker"
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Operational realtor tasks"
+    },
+    "/ai_memory/{aiMemoryId}": {
+      "schema": "AIMemory",
+      "description": "Realtor context memories"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Agent system notification messages"
+    },
+    "/subscriptions/{subscriptionId}": {
+      "schema": "Subscription",
+      "description": "Stripe/Paystack billing subscription metadata"
+    }
+  }
+}

@@ -30,75 +30,20 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
     setLoading(true);
     setError(null);
     try {
-      const { auth: fbAuth, propaiDb } = await import('../lib/supabaseClient');
-      const { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } = await import('firebase/auth');
-      if (propaiDb.isConfigured()) {
-        if (mode === 'signup') {
-          const userCred = await createUserWithEmailAndPassword(fbAuth, email, password);
-          if (userCred.user) {
-            await updateProfile(userCred.user, {
-              displayName: `${firstName} ${lastName}`
-            });
-            const token = await userCred.user.getIdToken();
-            const formattedUser = {
-              uid: userCred.user.uid,
-              email: userCred.user.email || email,
-              displayName: `${firstName} ${lastName}`,
-              photoURL: `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random`
-            };
-            onSuccess(formattedUser, token);
-          } else {
-            throw new Error('Verification required or user creation failed.');
-          }
-        } else {
-          const userCred = await signInWithEmailAndPassword(fbAuth, email, password);
-          if (userCred.user) {
-            const token = await userCred.user.getIdToken();
-            const formattedUser = {
-              uid: userCred.user.uid,
-              email: userCred.user.email || email,
-              displayName: userCred.user.displayName || email.split('@')[0],
-              photoURL: `https://ui-avatars.com/api/?name=${email}&background=random`
-            };
-            onSuccess(formattedUser, token);
-          }
-        }
-      } else {
-        // Mock Auth Success
-        setTimeout(() => {
-          const formattedUser = {
-            uid: 'mock-uid-' + Math.random().toString(36).substr(2, 9),
-            email,
-            displayName: mode === 'signup' ? `${firstName} ${lastName}` : email.split('@')[0],
-            photoURL: `https://ui-avatars.com/api/?name=${mode === 'signup' ? `${firstName}+${lastName}` : email}&background=random`
-          };
-          localStorage.setItem('propai_active_user_offline', JSON.stringify(formattedUser));
-          onSuccess(formattedUser, 'offline-token');
-          setLoading(false);
-        }, 1000);
-        return;
-      }
-      setLoading(false);
+      // Mock Auth Success
+      setTimeout(() => {
+        const user = {
+          uid: 'mock-uid-' + Math.random().toString(36).substr(2, 9),
+          email,
+          displayName: mode === 'signup' ? `${firstName} ${lastName}` : email.split('@')[0],
+          photoURL: `https://ui-avatars.com/api/?name=${mode === 'signup' ? `${firstName}+${lastName}` : email}&background=random`
+        };
+        onSuccess(user);
+        setLoading(false);
+      }, 1000);
     } catch (err: any) {
       console.error('Auth error:', err);
-      let errMsg = err.message || 'Authentication failed';
-      const code = err.code;
-      const msg = err.message || '';
-
-      if (code === 'auth/email-already-in-use' || msg.includes('email-already-in-use')) {
-        errMsg = 'This email is already in use. Please sign in instead, or use a different email.';
-      } else if (code === 'auth/weak-password' || msg.includes('weak-password')) {
-        errMsg = 'Password is too weak. It must be at least 6 characters.';
-      } else if (code === 'auth/invalid-email' || msg.includes('invalid-email')) {
-        errMsg = 'Please enter a valid email address.';
-      } else if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential' || msg.includes('credential') || msg.includes('wrong-password')) {
-        errMsg = 'Incorrect email or password.';
-      } else if (code === 'auth/operation-not-allowed' || msg.includes('operation-not-allowed')) {
-        errMsg = 'Email/Password sign-up is not allowed or not enabled in the Firebase Console. Go to Console > Authentication > Sign-in Method to enable Email/Password.';
-      } else if (code === 'auth/popup-closed-by-user' || msg.includes('popup-closed-by-user')) {
-        errMsg = 'The Google auth window was closed before finishing the login process.';
-      }
-      setError(errMsg);
+      setError(err.message || 'Authentication failed');
       setLoading(false);
     }
   };
@@ -107,33 +52,22 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
     setLoading(true);
     setError(null);
     try {
-      const { googleSignIn } = await import('../lib/firebaseAuth');
-      const result = await googleSignIn();
-      if (result) {
-        onSuccess(result.user, result.accessToken);
-      }
+      // Mock Google Auth Success
+      setTimeout(() => {
+        const user = {
+          uid: 'mock-google-uid',
+          email: 'google-user@example.com',
+          displayName: 'Google User',
+          photoURL: 'https://ui-avatars.com/api/?name=Google+User&background=random'
+        };
+        onSuccess(user, 'mock-access-token');
+        setLoading(false);
+      }, 1000);
     } catch (err: any) {
       console.error('Google Sign In error:', err);
-      setError(err.message || 'Google Authentication failed');
-    } finally {
+      setError(err.message);
       setLoading(false);
     }
-  };
-
-  const handleGuestBypass = () => {
-    setLoading(true);
-    setError(null);
-    const guestUser = {
-      uid: 'demo-guest-' + Math.random().toString(36).substring(2, 7),
-      email: 'guest@example.com',
-      displayName: 'Guest Premium User',
-      photoURL: `https://ui-avatars.com/api/?name=Guest+User&background=C5A059&color=fff`
-    };
-    localStorage.setItem('propai_active_user_offline', JSON.stringify(guestUser));
-    setTimeout(() => {
-      onSuccess(guestUser, 'offline-token');
-      setLoading(false);
-    }, 800);
   };
 
   return (
@@ -153,11 +87,11 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Logo className="w-6 h-6" />
-            <span className="text-base font-satoshi font-semibold tracking-tight text-white">PropAI</span>
+            <span className="text-base font-sans font-medium tracking-tight text-white">PropAI</span>
           </div>
           <button 
             onClick={onClose}
-            className="p-1.5 rounded-full text-[#333] hover:text-white hover:bg-[#1A1A1A] transition-all cursor-pointer"
+            className="p-1.5 rounded-full text-[#333] hover:text-white hover:bg-[#1A1A1A] transition-all"
           >
             <X className="w-5 h-5" />
           </button>
@@ -174,41 +108,41 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
           <div className="absolute -top-24 -left-24 w-48 h-48 bg-gold/5 blur-[80px] rounded-full pointer-events-none" />
           
           <div className="flex flex-col items-center mb-4">
-            <h2 className="text-sm font-satoshi text-white font-medium tracking-tight text-center">
+            <h2 className="text-xs font-sans text-white font-medium tracking-tight text-center">
               {mode === 'signin' ? 'Sign in to PropAI' : 'Create Account'}
             </h2>
-            <p className="text-[#52525b] text-[7px] uppercase tracking-[0.2em] font-sans mt-1">Autonomous growth starts here</p>
+            <p className="text-[#444] text-[6px] uppercase tracking-[0.2em] font-bold mt-1">Autonomous growth starts here</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-2">
             <AnimatePresence mode="wait">
               {mode === 'signup' && (
                 <motion.div 
-                   initial={{ opacity: 0, height: 0 }}
-                   animate={{ opacity: 1, height: 'auto' }}
-                   exit={{ opacity: 0, height: 0 }}
-                   className="grid grid-cols-2 gap-2 mb-0.5"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="grid grid-cols-2 gap-2 mb-0.5"
                 >
                   <div className="space-y-0.5">
-                    <label className="text-[6px] uppercase tracking-widest font-black text-[#52525b] px-1 font-mono">First Name</label>
+                    <label className="text-[6px] uppercase tracking-widest font-black text-[#444] px-1">First Name</label>
                     <input
                       type="text"
                       required
                       placeholder="First"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md px-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222] font-sans"
+                      className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md px-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222]"
                     />
                   </div>
                   <div className="space-y-0.5">
-                    <label className="text-[6px] uppercase tracking-widest font-black text-[#52525b] px-1 font-mono">Last Name</label>
+                    <label className="text-[6px] uppercase tracking-widest font-black text-[#444] px-1">Last Name</label>
                     <input
                       type="text"
                       required
                       placeholder="Last"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md px-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222] font-sans"
+                      className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md px-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222]"
                     />
                   </div>
                 </motion.div>
@@ -216,92 +150,65 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
             </AnimatePresence>
 
             <div className="space-y-0.5">
-              <label className="text-[6px] uppercase tracking-widest font-black text-[#52525b] px-1 font-mono">Email</label>
+              <label className="text-[6px] uppercase tracking-widest font-black text-[#444] px-1">Email</label>
               <div className="relative">
-                <Mail className="absolute left-2.5 top-1/2 -translate-y-1/2 w-2 h-2 text-[#52525b]" />
+                <Mail className="absolute left-2.5 top-1/2 -translate-y-1/2 w-2 h-2 text-[#333]" />
                 <input
                   type="email"
                   required
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md pl-7 pr-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222] font-sans"
+                  className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md pl-7 pr-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222]"
                 />
               </div>
             </div>
 
             <div className="space-y-0.5">
-              <label className="text-[6px] uppercase tracking-widest font-black text-[#52525b] px-1 font-mono">Password</label>
+              <label className="text-[6px] uppercase tracking-widest font-black text-[#444] px-1">Password</label>
               <div className="relative">
-                <Lock className="absolute left-2.5 top-1/2 -translate-y-1/2 w-2 h-2 text-[#52525b]" />
+                <Lock className="absolute left-2.5 top-1/2 -translate-y-1/2 w-2 h-2 text-[#333]" />
                 <input
                   type="password"
                   required
                   placeholder="********"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md pl-7 pr-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222] font-sans"
+                  className="w-full bg-[#0D0D0D] border border-[#1A1A1A] rounded-md pl-7 pr-2 py-1.5 text-[9px] text-white focus:border-gold/30 outline-none transition-all placeholder:text-[#222]"
                 />
               </div>
             </div>
 
             {error && (
-              <div className="space-y-2 py-1 border border-red-900/40 bg-red-950/10 rounded-lg p-2.5 text-left">
-                <p className="text-[10px] text-red-400 font-medium tracking-wide leading-relaxed font-sans">
-                  {error}
-                </p>
-                {error.includes('Sign-in Method') && (
-                  <div className="mt-1.5 text-[9px] text-[#a1a1aa] space-y-1 p-2 bg-[#09090b] border border-[#18181b] rounded font-sans leading-normal">
-                    <p className="font-bold text-amber-500 uppercase text-[8px] tracking-wider font-mono">🔧 Firebase Configuration:</p>
-                    <ol className="list-decimal pl-3.5 space-y-1 text-[#71717a]">
-                      <li>Open the <a href="https://console.firebase.google.com/" target="_blank" rel="noreferrer" className="text-amber-500 hover:text-amber-400 underline font-mono">Firebase Console</a>.</li>
-                      <li>Navigate to <strong>Authentication &gt; Sign-in Method</strong>.</li>
-                      <li>Click <strong>Add Provider</strong>, select <strong>Email/Password</strong>, enable it, and save.</li>
-                    </ol>
-                    <p className="text-[#71717a] mt-1">Prefer exploring immediately? Click the **Guest Mode** demo launcher below.</p>
-                  </div>
-                )}
-                {mode === 'signup' && (error.includes('already in use') || error.includes('already registered')) && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMode('signin');
-                      setError(null);
-                    }}
-                    className="w-full text-center text-amber-500 hover:text-white transition-colors font-sans text-[8px] uppercase tracking-widest underline decoration-amber-500/40 cursor-pointer block mt-1"
-                  >
-                    Switch to Sign In mode
-                  </button>
-                )}
-              </div>
+              <p className="text-[6px] text-red-500 font-bold uppercase tracking-widest text-center py-0.5">{error}</p>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="luxury-button w-full py-2.5 text-[7px] mt-2 flex items-center justify-center gap-1.5 group shadow-[0_0_10px_rgba(197,160,89,0.1)] cursor-pointer"
+              className="luxury-button w-full py-2.5 text-[7px] mt-2 flex items-center justify-center gap-1.5 group shadow-[0_0_10px_rgba(197,160,89,0.1)]"
             >
               {loading ? <Loader2 className="w-2 h-2 animate-spin" /> : (
                 <>
-                  <span className="font-satoshi">{mode === 'signin' ? 'Sign In' : 'Create Account'}</span>
+                  {mode === 'signin' ? 'Sign In' : 'Create Account'}
                   <ArrowRight className="w-2 h-2 transition-transform group-hover:translate-x-1" />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-4 flex flex-col items-center gap-2.5">
+          <div className="mt-4 flex flex-col items-center gap-3">
             <div className="flex items-center gap-3 w-full">
               <div className="h-px bg-[#1A1A1A] flex-1" />
-              <span className="text-[6px] text-[#444] uppercase font-mono tracking-widest">or</span>
+              <span className="text-[6px] text-[#222] uppercase font-black tracking-widest">or</span>
               <div className="h-px bg-[#1A1A1A] flex-1" />
             </div>
 
             <button 
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center gap-2 bg-white text-black py-2 rounded-md font-bold text-[7px] uppercase tracking-widest hover:bg-[#F0F0F0] transition-all cursor-pointer font-sans"
+              className="w-full flex items-center justify-center gap-2 bg-white text-black py-2 rounded-md font-bold text-[7px] uppercase tracking-widest hover:bg-[#F0F0F0] transition-all"
             >
-              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24">
+              <svg className="w-2 h-2" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1Z" />
                 <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23Z" />
                 <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84Z" />
@@ -311,16 +218,8 @@ export default function AuthPage({ onClose, onSuccess, initialMode = 'signin' }:
             </button>
 
             <button 
-              onClick={handleGuestBypass}
-              className="w-full flex items-center justify-center gap-2 bg-[#0e0e11] border border-[#222] text-[#e1e1e6] hover:text-white hover:border-gold/40 py-2 rounded-md font-bold text-[7px] uppercase tracking-widest transition-all cursor-pointer font-sans"
-            >
-              <User className="w-2.5 h-2.5 text-gold" />
-              Launch Quick Demo (Guest Mode)
-            </button>
-
-            <button 
               onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
-              className="text-[7px] uppercase font-mono tracking-widest text-[#52525b] hover:text-gold transition-colors"
+              className="text-[7px] uppercase font-black tracking-widest text-[#444] hover:text-gold transition-colors"
             >
               {mode === 'signin' ? "Need a protocol? Sign up" : "Registered? Sign in"}
             </button>
